@@ -21,8 +21,8 @@ public class Writer {
     private String lastName;
 
     @ManyToMany(
-            fetch = FetchType.EAGER,
-            cascade = CascadeType.ALL)
+            fetch = FetchType.LAZY,
+            cascade = CascadeType.MERGE)
     @JoinTable(
             name = "writer_post",
             joinColumns = @JoinColumn(name = "writer_id"),
@@ -31,6 +31,12 @@ public class Writer {
 
     public Writer(Integer id, String firstName, String lastName, List<Post> posts) {
         this.id = id;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.posts = posts;
+    }
+
+    public Writer(String firstName, String lastName, List<Post> posts) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.posts = posts;

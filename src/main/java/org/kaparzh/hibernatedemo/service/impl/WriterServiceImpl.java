@@ -30,7 +30,7 @@ public class WriterServiceImpl implements WriterService {
 
     @Override
     public Writer create(String firstName, String lastName, List<Post> postList) {
-        return writerRepository.save(new Writer(1, firstName, lastName, postList));
+        return writerRepository.save(new Writer(firstName, lastName, postList));
     }
 
     @Override

@@ -28,7 +28,7 @@ public class LabelServiceImpl implements LabelService {
 
     @Override
     public Label create(String labelName) {
-        return labelRepository.save(new Label(1, labelName));
+        return labelRepository.save(new Label(labelName));
     }
 
     @Override

@@ -14,8 +14,10 @@ CREATE TABLE IF NOT EXISTS post
 
 CREATE TABLE IF NOT EXISTS post_label
 (
-    post_id  int NOT NULL REFERENCES post (id) ON DELETE CASCADE,
-    label_id int NOT NULL REFERENCES label (id) ON DELETE CASCADE
+    post_id  int NOT NULL,
+    label_id int NOT NULL,
+    FOREIGN KEY (post_id) REFERENCES post (id) ON DELETE CASCADE,
+    FOREIGN KEY (label_id) REFERENCES label (id) ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS writer
@@ -27,7 +29,9 @@ CREATE TABLE IF NOT EXISTS writer
 
 CREATE TABLE IF NOT EXISTS writer_post
 (
-    writer_id int NOT NULL REFERENCES writer (id) ON DELETE CASCADE,
-    post_id   int NOT NULL REFERENCES post (id) ON DELETE CASCADE
+    writer_id int NOT NULL,
+    post_id   int NOT NULL,
+    FOREIGN KEY (writer_id) REFERENCES writer (id) ON DELETE CASCADE,
+    FOREIGN KEY (post_id) REFERENCES post (id) ON DELETE CASCADE
 );
 

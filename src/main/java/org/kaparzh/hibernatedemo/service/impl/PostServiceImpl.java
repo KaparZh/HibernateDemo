@@ -32,7 +32,7 @@ public class PostServiceImpl implements PostService {
     @Override
     public Post create(String content, List<Label> labels) {
         LocalDateTime created = LocalDateTime.now();
-        return postRepository.save(new Post(1, content, created, created, labels));
+        return postRepository.save(new Post(content, created, created, labels));
     }
 
     @Override

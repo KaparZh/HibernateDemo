@@ -1,23 +1,20 @@
 package org.kaparzh.hibernatedemo.repository.impl;
 
 import org.hibernate.Session;
-import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
-import org.hibernate.cfg.Configuration;
 import org.kaparzh.hibernatedemo.model.Writer;
 import org.kaparzh.hibernatedemo.repository.WriterRepository;
+import org.kaparzh.hibernatedemo.utils.HibernateUtils;
 
 import java.util.List;
 
 public class WriterRepositoryImpl implements WriterRepository {
 
-    private final SessionFactory sessionFactory = new Configuration().configure().buildSessionFactory();
-
     @Override
     public Writer save(Writer writer) {
-        try (Session session = sessionFactory.openSession()) {
+        try (Session session = HibernateUtils.getSession()) {
             Transaction transaction = session.beginTransaction();
-            session.save(writer);
+            session.persist(writer);
             transaction.commit();
         }
         return writer;
@@ -25,9 +22,9 @@ public class WriterRepositoryImpl implements WriterRepository {
 
     @Override
     public Writer update(Writer writer) {
-        try (Session session = sessionFactory.openSession()) {
+        try (Session session = HibernateUtils.getSession()) {
             Transaction transaction = session.beginTransaction();
-            session.update(writer);
+            session.merge(writer);
             transaction.commit();
         }
         return writer;
@@ -35,10 +32,10 @@ public class WriterRepositoryImpl implements WriterRepository {
 
     @Override
     public void deleteById(Integer id) {
-        try (Session session = sessionFactory.openSession()) {
+        try (Session session = HibernateUtils.getSession()) {
             Transaction transaction = session.beginTransaction();
             Writer writer = session.get(Writer.class, id);
-            session.delete(writer);
+            session.remove(writer);
             transaction.commit();
         }
     }
@@ -46,10 +43,8 @@ public class WriterRepositoryImpl implements WriterRepository {
     @Override
     public Writer getById(Integer id) {
         Writer writer;
-        try (Session session = sessionFactory.openSession()) {
-            Transaction transaction = session.beginTransaction();
+        try (Session session = HibernateUtils.getSession()) {
             writer = session.get(Writer.class, id);
-            transaction.commit();
         }
         return writer;
     }
@@ -57,10 +52,8 @@ public class WriterRepositoryImpl implements WriterRepository {
     @Override
     public List<Writer> getAll() {
         List<Writer> writers;
-        try (Session session = sessionFactory.openSession()) {
-            Transaction transaction = session.beginTransaction();
-            writers = session.createQuery("FROM Writer").list();
-            transaction.commit();
+        try (Session session = HibernateUtils.getSession()) {
+            writers = session.createQuery("FROM Writer w LEFT JOIN FETCH w.posts", Writer.class).getResultList();
         }
         return writers;
     }

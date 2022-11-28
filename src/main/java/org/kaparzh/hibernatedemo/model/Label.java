@@ -2,6 +2,7 @@ package org.kaparzh.hibernatedemo.model;
 
 import jakarta.persistence.*;
 
+import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -16,8 +17,15 @@ public class Label {
     @Column(name = "name")
     private String name;
 
-    public Label(int id, String name) {
+    @ManyToMany(mappedBy = "labels")
+    private List<Post> posts;
+
+    public Label(Integer id, String name) {
         this.id = id;
+        this.name = name;
+    }
+
+    public Label(String name) {
         this.name = name;
     }
 

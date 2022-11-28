@@ -3,6 +3,7 @@ package org.kaparzh.hibernatedemo.model;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -25,16 +26,27 @@ public class Post {
     private LocalDateTime updated;
 
     @ManyToMany(
-            fetch = FetchType.EAGER,
-            cascade = CascadeType.ALL)
+            fetch = FetchType.LAZY,
+            cascade = CascadeType.MERGE)
     @JoinTable(
             name = "post_label",
-            joinColumns = @JoinColumn(name = "post_id"),
-            inverseJoinColumns = @JoinColumn(name = "label_id"))
+            joinColumns = {@JoinColumn(name = "post_id")},
+            inverseJoinColumns = {@JoinColumn(name = "label_id")}
+    )
     private List<Label> labels;
+
+    @ManyToMany(mappedBy = "posts")
+    private List<Writer> writers;
 
     public Post(Integer id, String content, LocalDateTime created, LocalDateTime updated, List<Label> labels) {
         this.id = id;
+        this.content = content;
+        this.created = created;
+        this.updated = updated;
+        this.labels = labels;
+    }
+
+    public Post(String content, LocalDateTime created, LocalDateTime updated, List<Label> labels) {
         this.content = content;
         this.created = created;
         this.updated = updated;
